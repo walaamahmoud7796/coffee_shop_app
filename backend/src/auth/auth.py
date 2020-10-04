@@ -10,7 +10,7 @@ AUTH0_DOMAIN = "dev-r6zdldur.eu.auth0.com"
 ALGORITHMS = ["RS256"]
 API_AUDIENCE = "coffee_shop"
 
-## AuthError Exception
+# AuthError Exception
 """
 AuthError Exception
 A standardized way to communicate auth failure modes
@@ -23,9 +23,7 @@ class AuthError(Exception):
         self.status_code = status_code
 
 
-## Auth Header
-
-
+# Auth Header
 
 
 def get_token_auth_header():
@@ -38,7 +36,6 @@ def get_token_auth_header():
             },
             401,
         )
-    
 
     auth_header = request.headers.get("Authorization")
     header_parts = auth_header.split(" ")
@@ -50,7 +47,6 @@ def get_token_auth_header():
             },
             401,
         )
-        
 
     elif header_parts[0].lower() != "bearer":
         raise AuthError(
@@ -60,10 +56,8 @@ def get_token_auth_header():
             },
             401,
         )
-        
+
     return header_parts[1]
-
-
 
 
 def check_permissions(permission, payload):
@@ -78,13 +72,11 @@ def check_permissions(permission, payload):
         )
     if permission not in payload["permissions"]:
         raise AuthError(
-            {"code": "unauthorized", "description": "Permission not found"}, 403
+            {"code": "unauthorized",
+             "description": "Permission not found"}, 403
         )
 
     return True
-
-
-
 
 
 def verify_decode_jwt(token):
@@ -94,7 +86,8 @@ def verify_decode_jwt(token):
     rsa_key = {}
     if "kid" not in unverified_header:
         raise AuthError(
-            {"code": "invalid_header", "description": "Authorization malformed."}, 401
+            {"code": "invalid_header",
+             "description": "Authorization malformed."}, 401
         )
 
     for key in jwks["keys"]:
@@ -146,9 +139,6 @@ def verify_decode_jwt(token):
         },
         400,
     )
-
-
-
 
 
 def requires_auth(permission=""):
